@@ -1,0 +1,85 @@
+
+<div *ngIf="funcionarioSelecionado">
+
+        <app-titulo [titulo] = "(funcionarioSelecionado.id === 0 ? 'Novo Aluno' : 'Registro Funcionario: ' + funcionarioSelecionado.id)">
+          <button class="btn btn-warning" (click)="voltar()">
+            Voltar
+          </button>
+        </app-titulo>
+
+    <form [formGroup]="funcionarioForm" (submit)="funcionarioSubmit()">
+      <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">Nome</label>
+        <input type="text" class="form-control" formControlName="nome">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="inputGroupSelect01">Escalas de Trabalho</label>
+        <select class="form-select" id="inputGroupSelect01" name="escalaList" formControlName="escala">
+          <!--5x2, 6x1, 6x2 e 12x36-->
+          <option selected>{{funcionarioSelecionado.escala}}</option>
+          <option *ngFor = "let list of escalaList" [value]="list">{{list}}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput3" class="form-label">Custo diário</label>
+        <input mask="separator.2" thousandSeparator="." type="text" class="form-control" formControlName="custoDia">
+      </div>
+      <button class="btn btn-success" [disabled]="!funcionarioForm.valid"> Enviar </button>
+    </form>
+
+  </div>
+
+  <div *ngIf="!funcionarioSelecionado">
+    <app-titulo [titulo]= "titulo">
+      <button class="btn btn-success" (click)="funcionarioNovo()">
+        Cadastrar Funcionario
+      </button>
+    </app-titulo>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="selecionaMes">Mês</label>
+      <select class="form-select" id="selecionaMes" (click)='this.calculaDiasTrabalhados(mes , 2021)'>
+        <option selected>Escolha o mês</option>
+        <option value="1">Janeiro</option>
+        <option value="2">Fevereiro</option>
+        <option value="3">Março</option>
+        <option value="4">Abril</option>
+        <option value="5">Maio</option>
+        <option value="6">Junho</option>
+        <option value="7">Julho</option>
+        <option value="8">Agosto</option>
+        <option value="9">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+       </select>
+    </div>
+
+    <table class="table table-hover .themed-grid-col">
+      <thead class="table-dark">
+        <tr>
+          <th scope='col' > Registro </th>
+          <th scope='col'> Nome </th>
+          <th scope='col'> Escalada de trabalho</th>
+          <th scope='col'> Custo Diário</th>
+          <th scope='col'> Custo Mensal Total</th>
+          <th scope="col"> Editar </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor= 'let func of funcionarios'>
+        <td scope="row">{{func.id}}</td>
+        <td>{{func.nome}}</td>
+        <td>{{func.escala}}</td>
+        <td>{{func.custoDia}}</td>
+        <td >{{func.custoMensal}}</td>
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-outline-primary" (click)="funcSelect(func)">Editar</button>
+            <button class="btn btn-sm btn-outline-warning" (click)="funcionarioExcluir(func.id)">Excluir</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
