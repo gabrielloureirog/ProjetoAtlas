@@ -6,8 +6,8 @@ export class Funcionario {
   this.id = 0;
   this.nome = '';
   this.escala  = '';
-  this.custoDia = 0;
-  this.custoMensal = 0;
+  this.custoDia;
+  this.custoMensal;
 
   }
 

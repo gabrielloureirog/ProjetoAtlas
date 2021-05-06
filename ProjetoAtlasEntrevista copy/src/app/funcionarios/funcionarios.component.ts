@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Funcionario } from '../models/Funcionario';
 import { FuncionarioService } from './funcionario.service';
 
@@ -18,14 +19,14 @@ export class FuncionariosComponent implements OnInit{
   public escalaList: string[] = [];
   public mes : number;
   public dias  : number;
-  public mesSelecionado : number;
+  public mesSelecionado : any;
 
 
   //5x2, 6x1, 6x2 e 12x36.
   constructor(
               private funcionarioService: FuncionarioService,
+              public router : Router,
               private fb: FormBuilder){
-              //this.funcionarioSelecionado = new Funcionario();
               this.criarForm();
               this.escalaList = ["5x2", "6x1","6x2", "12x36"];
 
@@ -33,7 +34,6 @@ export class FuncionariosComponent implements OnInit{
 
   ngOnInit() {
     this.carregarFuncionario();
-
   };
 
   criarForm(){
@@ -47,6 +47,7 @@ export class FuncionariosComponent implements OnInit{
 
   funcionarioSubmit(){
     this.salvarFuncionario(this.funcionarioForm.value);
+    this.voltarPage();
   };
 
   salvarFuncionario(funcionario: Funcionario){
@@ -67,6 +68,10 @@ export class FuncionariosComponent implements OnInit{
   voltar(){
     this.funcionarioSelecionado = null;
   };
+
+  voltarPage(){
+    this.router.navigate(['/funcionarios']);
+  }
 
   funcionarioNovo(){
     this.funcionarioSelecionado = new Funcionario();
@@ -96,8 +101,6 @@ export class FuncionariosComponent implements OnInit{
         this.funcionarios = funcionarios;
         if (this.funcionarios != null) {
           this.calculaCusto ();
-          //this.atualizaTela();
-          //this.atualizaTabela();
         }
       },
       (erro: any) => {
@@ -106,8 +109,16 @@ export class FuncionariosComponent implements OnInit{
     );
   }
 
-  public calculaCusto (){
-    var dias = this.calculaDiasTrabalhados('', 2021);
+  public calculaCusto (param2?){
+
+    if (param2 == '') {
+      var dias = this.calculaDiasTrabalhados(5, 2021);
+      //console.log(param2);
+    }else {
+      var dias = this.calculaDiasTrabalhados(param2, 2021);
+      //console.log(param2);
+    };
+
     var anoBissexto = [28, 29];
     var isBissexto = anoBissexto.includes(dias);
     for (let index = 0; index < this.funcionarios.length; index++) {
@@ -141,20 +152,23 @@ export class FuncionariosComponent implements OnInit{
 
   }
 
-  public atualizaTela(mesClicado : number){
-    //var selectBox = document.getElementById('selecionaMes');
-    //this.calculaCusto (parseInt(selectBox));
-    //console.log(this.mes);
+  public atualizaTabela(novoValor){
+    //console.log(parseInt(novoValor));
+    this.calculaCusto(parseInt(novoValor));
   }
 
-  public atualizaTabela(){
-    this.funcionarioService.getMesDropDownvalues().subscribe(mesSelecionado => {
-      console.log(mesSelecionado);
-      mesSelecionado.valueOf();
-    })
-  }
-
-
+  public meses = [
+    { id: 1,  name: "Janeiro"  },
+    { id: 2,  name: "Fevereiro"},
+    { id: 3,  name: "Março"    },
+    { id: 4,  name: "Abril"    },
+    { id: 5,  name: "Maio"     },
+    { id: 6,  name: "Junho"    },
+    { id: 7,  name: "Julho"    },
+    { id: 8,  name: "Agosto"   },
+    { id: 9,  name: "Setembro" },
+    { id: 10, name: "Outubro"  },
+    { id: 11, name: "Novembro" },
+    { id: 12, name: "Dezembro" },
+];
 }
-
-

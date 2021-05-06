@@ -1,7 +1,6 @@
-
 <div *ngIf="funcionarioSelecionado">
 
-        <app-titulo [titulo] = "(funcionarioSelecionado.id === 0 ? 'Novo Aluno' : 'Registro Funcionario: ' + funcionarioSelecionado.id)">
+        <app-titulo [titulo] = "(funcionarioSelecionado.id === 0 ? 'Novo Funcionario' : 'Registro Funcionario: ' + funcionarioSelecionado.id)">
           <button class="btn btn-warning" (click)="voltar()">
             Voltar
           </button>
@@ -22,7 +21,7 @@
       </div>
       <div class="mb-3">
         <label for="formGroupExampleInput3" class="form-label">Custo diário</label>
-        <input mask="separator.2" thousandSeparator="." type="text" class="form-control" formControlName="custoDia">
+        <input placeholder="R$ 00,00" mask="separator.2" thousandSeparator="." type="text" class="form-control" formControlName="custoDia">
       </div>
       <button class="btn btn-success" [disabled]="!funcionarioForm.valid"> Enviar </button>
     </form>
@@ -37,20 +36,8 @@
     </app-titulo>
     <div class="input-group mb-3">
       <label class="input-group-text" for="selecionaMes">Mês</label>
-      <select class="form-select" id="selecionaMes" (click)='this.calculaDiasTrabalhados(mes , 2021)'>
-        <option selected>Escolha o mês</option>
-        <option value="1">Janeiro</option>
-        <option value="2">Fevereiro</option>
-        <option value="3">Março</option>
-        <option value="4">Abril</option>
-        <option value="5">Maio</option>
-        <option value="6">Junho</option>
-        <option value="7">Julho</option>
-        <option value="8">Agosto</option>
-        <option value="9">Setembro</option>
-        <option value="10">Outubro</option>
-        <option value="11">Novembro</option>
-        <option value="12">Dezembro</option>
+      <select  class="form-select" [ngModel]="mesSelecionado" (ngModelChange)="atualizaTabela($event)">
+        <option *ngFor="let m of meses" [value]="m.id">{{ m.name }}</option>
        </select>
     </div>
 
@@ -70,8 +57,8 @@
         <td scope="row">{{func.id}}</td>
         <td>{{func.nome}}</td>
         <td>{{func.escala}}</td>
-        <td>{{func.custoDia}}</td>
-        <td >{{func.custoMensal}}</td>
+        <td>{{ func.custoDia | currency: 'R$' }}</td>
+        <td >{{ func.custoMensal | currency: 'R$' }}</td>
         <td>
           <div class="btn-group">
             <button class="btn btn-sm btn-outline-primary" (click)="funcSelect(func)">Editar</button>

@@ -10,6 +10,13 @@ import { TituloComponent } from './titulo/titulo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from "ngx-mask";
 
+import { LOCALE_ID } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import  localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +34,9 @@ import { NgxMaskModule } from "ngx-mask";
       dropSpecialCharacters: false
     }),
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR'}, {
+                provide:  DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
+              ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
