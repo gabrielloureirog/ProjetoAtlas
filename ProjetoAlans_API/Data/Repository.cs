@@ -42,7 +42,7 @@ namespace ProjetoAlans_API.Data
             return await query.ToArrayAsync();
         }
 
-        //Método implementado para pegar um funcionario usando o nome
+        //Método implementado para pegar um funcionario usando ID
         public async Task<Funcionario> GetFuncionarioIdAsync(int id)
         {
             IQueryable<Funcionario> query = _context.Funcionarios;
