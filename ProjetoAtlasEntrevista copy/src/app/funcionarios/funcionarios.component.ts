@@ -21,8 +21,6 @@ export class FuncionariosComponent implements OnInit{
   public dias  : number;
   public mesSelecionado : any;
 
-
-  //5x2, 6x1, 6x2 e 12x36.
   constructor(
               private funcionarioService: FuncionarioService,
               public router : Router,
@@ -70,7 +68,7 @@ export class FuncionariosComponent implements OnInit{
   };
 
   voltarPage(){
-    this.router.navigate(['/funcionarios']);
+    window.location.reload();
   }
 
   funcionarioNovo(){
@@ -110,13 +108,13 @@ export class FuncionariosComponent implements OnInit{
   }
 
   public calculaCusto (param2?){
-
+    const dataAtual = new Date();
+    var anoParam = dataAtual.getFullYear();
+    var mesParam = dataAtual.getMonth();
     if (param2 == '') {
-      var dias = this.calculaDiasTrabalhados(5, 2021);
-      //console.log(param2);
+      var dias = this.calculaDiasTrabalhados(mesParam+1, anoParam);
     }else {
       var dias = this.calculaDiasTrabalhados(param2, 2021);
-      //console.log(param2);
     };
 
     var anoBissexto = [28, 29];
@@ -124,7 +122,6 @@ export class FuncionariosComponent implements OnInit{
     for (let index = 0; index < this.funcionarios.length; index++) {
       var escala = this.funcionarios[index].escala;
       let diasTrabalhados = 0;
-      //28, 30, 31
       switch (escala) {
         case "5x2" :
           diasTrabalhados = (isBissexto ? 20 : dias == 30 ? 22 : 23);
@@ -147,14 +144,11 @@ export class FuncionariosComponent implements OnInit{
   }
 
   public calculaDiasTrabalhados (mes: any, year : any){
-
         return new Date(year, mes, 0).getDate();
-
   }
 
   public atualizaTabela(novoValor){
-    //console.log(parseInt(novoValor));
-    this.calculaCusto(parseInt(novoValor));
+      this.calculaCusto(parseInt(novoValor));
   }
 
   public meses = [
